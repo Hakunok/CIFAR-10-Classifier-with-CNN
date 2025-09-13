@@ -5,4 +5,5 @@ Convolution Neural Network Model for CIFAR-10
 # UPDATE 9/12/2025: Added model.py and train.py 
 - train.py still missing methods: evaluate(), train_one_epoch(), main()
 
-# UPDATE 9/13/2025: Added evaluate() and train_one_epoch() to train.py
+# UPDATE 9/13/2025: Modified train.py
+- Added evaluate() and train_one_epoch() to train.py
