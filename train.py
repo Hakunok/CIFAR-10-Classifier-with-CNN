@@ -46,3 +46,50 @@ def get_loaders(data_root, batch_size, num_workers, val_split=5000, augment=True
     test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True)
 
     return train_loader, val_loader, test_loader
+
+def train_one_epoch(model, loader, device, optimizer, criterion):
+    model.train()
+    running_loss = 0.0
+    correct = 0
+    total = 0
+
+    for inputs, labels in loader:
+        inputs, labels = inputs.to(device), labels.to(device)
+
+        optimizer.zero_grad(set_to_none=True)
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item() * inputs.size(0)
+        pred = outputs.argmax(1)
+        correct += pred.eq(labels).sum().item()
+        total += inputs.size(0)
+
+    epoch_loss = running_loss / total
+    epoch_acc = correct / total
+    return epoch_loss, epoch_acc
+
+@torch.no_grad()
+def evaluate(model, loader, device, criterion):
+    model.eval()
+    total_loss = 0.0
+    correct = 0
+    total = 0
+
+    for inputs, labels in loader:
+        inputs, labels = inputs.to(device), labels.to(device)
+
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+
+        total_loss += loss.item() * inputs.size(0)
+        pred = outputs.argmax(dim=1)
+        correct += pred.eq(labels).sum().item()
+        total += inputs.size(0)
+
+    epoch_loss = total_loss / total
+    epoch_acc = correct / total
+    return epoch_loss, epoch_acc
+    

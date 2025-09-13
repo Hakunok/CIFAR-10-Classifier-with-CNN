@@ -1,7 +1,20 @@
 import torch.nn as nn
 
 class SimpleCNN(nn.Module):
-    def __init__(self, num_classes: int = 10):
+
+    """A simple Convolutional Neural Network (CNN) for image classification."""
+    # Number of classes is set to 10 by default, can be changed when initializing the model
+    # But for CIFAR-10, there's only 10 classes: 
+        # airplane automobile 
+        # bird 
+        # cat 
+        # deer 
+        # dog 
+        # frog 
+        # horse 
+        # ship 
+        # truck
+    def __init__(self, num_classes: int = 10):  
         super().__init__()
         self.features = nn.Sequential(
             nn.Conv2d(3, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU(True),
